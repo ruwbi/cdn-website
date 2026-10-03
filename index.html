@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A test page deployed to observe Content Delivery Network behavior.">
+<meta name="theme-color" content="#0b2a5b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b2a5b'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='%2360a5fa' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23fff'/%3E%3C/svg%3E">
+<title>Hello CDN!</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f4f6fa;--bg2:#e6edf9;--card:#fff;--line:#e2e8f2;--ink:#142238;--muted:#5b6b82;
+  --head:#0b2a5b;--accent:#1d4ed8;--soft:#f6f9ff;--soft2:#eaf1ff;--chip:#eaf0fc;--chipline:#d7e2f7;
+  --g1:#0b2a5b;--g2:#1d4ed8;--g3:#3b82f6;--shadow:15,35,70;--green:#16a34a;
+  --ok-bg:#e8f8ee;--ok-line:#bfe9cd;--ok-ink:#0f6b32;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#08111f;--bg2:#0d1b36;--card:#101b31;--line:#21304d;--ink:#e6edf8;--muted:#93a4c0;
+  --head:#d6e4ff;--accent:#8db4ff;--soft:#0d1829;--soft2:#15233f;--chip:#16264a;--chipline:#2a4380;
+  --g1:#d6e4ff;--g2:#8db4ff;--g3:#60a5fa;--shadow:0,0,0;
+  --ok-bg:#0f2a1c;--ok-line:#1d5a38;--ok-ink:#6ee7a0;
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(900px 400px at 85% -100px,rgba(59,130,246,.2),transparent 70%),
+             linear-gradient(180deg,var(--bg2) 0,var(--bg) 440px);
+}
+.topbar{height:8px;background:linear-gradient(90deg,#0b2a5b,#1d4ed8 50%,#3b82f6)}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 56px}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;color:#000;padding:8px 12px;border-radius:8px;z-index:9}
+
+/* Header */
+header{padding:46px 4px 0;display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;justify-content:space-between}
+h1{
+  font-size:clamp(2.5rem,8vw,4rem);font-weight:800;letter-spacing:-.035em;line-height:1.02;
+  background:linear-gradient(90deg,var(--g1),var(--g2) 65%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.sub{flex-basis:100%;order:3;color:var(--muted);font-size:1.12rem;max-width:58ch}
+.badge{
+  display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:999px;font-weight:700;font-size:.9rem;
+  color:var(--ok-ink);background:var(--ok-bg);border:1px solid var(--ok-line);
+}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(22,163,74,.55)}70%{box-shadow:0 0 0 9px rgba(22,163,74,0)}100%{box-shadow:0 0 0 0 rgba(22,163,74,0)}}
+.rule{flex-basis:100%;order:4;height:3px;border:0;border-radius:3px;background:linear-gradient(90deg,#0b2a5b,#1d4ed8 50%,rgba(59,130,246,.12))}
+
+/* Hero */
+.hero{
+  position:relative;margin-top:28px;border-radius:24px;overflow:hidden;line-height:0;min-height:220px;
+  background:linear-gradient(135deg,#0b2a5b,#1d4ed8);box-shadow:0 30px 56px -24px rgba(11,42,91,.65);
+}
+.hero img{width:100%;height:clamp(250px,50vw,460px);object-fit:cover;display:block;transition:transform .9s ease}
+.hero:hover img{transform:scale(1.035)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(11,42,91,.05) 35%,rgba(8,20,48,.85))}
+.cap{position:absolute;inset:auto 0 0 0;z-index:2;padding:22px 28px 64px;line-height:1.4;color:#fff;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;align-items:flex-end}
+.cap strong{font-size:1.25rem;font-weight:700;letter-spacing:-.01em}
+.cap small{font-size:.78rem;color:#cfdcf5}.cap a{color:#cfdcf5}
+
+/* Metric tiles overlapping the hero */
+.metrics{position:relative;z-index:3;margin:-46px 18px 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;
+  box-shadow:0 14px 28px -14px rgba(var(--shadow),.35);transition:transform .25s,box-shadow .25s;
+}
+.tile:hover{transform:translateY(-3px)}
+.tile small{display:block;color:var(--muted);font-size:.78rem;font-weight:600}
+.tile b{display:block;margin-top:2px;font-size:1.45rem;line-height:1.25;color:var(--head);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+/* Cards */
+.card{
+  margin-top:26px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 30px;
+  box-shadow:0 2px 4px rgba(var(--shadow),.05),0 14px 30px -16px rgba(var(--shadow),.2);
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+}
+.card:hover{transform:translateY(-3px);border-color:var(--chipline);box-shadow:0 4px 8px rgba(var(--shadow),.06),0 24px 40px -16px rgba(29,78,216,.32)}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h2{font-size:1.4rem;font-weight:800;letter-spacing:-.015em;color:var(--head);display:flex;align-items:center;gap:12px}
+h2::before{content:"";width:6px;height:1.3em;border-radius:3px;background:linear-gradient(180deg,#3b82f6,#0b2a5b)}
+.divider{height:1px;border:0;margin:14px 0 16px;background:linear-gradient(90deg,var(--accent),transparent 70%);opacity:.6}
+button{
+  font:inherit;font-size:.85rem;font-weight:600;color:var(--accent);background:var(--chip);border:1px solid var(--chipline);
+  padding:7px 15px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s,transform .15s;
+}
+button:hover{background:var(--accent);color:var(--card)}button:active{transform:scale(.96)}
+button:focus-visible,a:focus-visible{outline:3px solid rgba(59,130,246,.55);outline-offset:2px}
+
+/* Info rows */
+.info{display:grid;gap:4px}
+.row{display:grid;grid-template-columns:210px 1fr;gap:12px;padding:11px 14px;border-radius:10px;transition:background .2s}
+.row:nth-child(odd){background:var(--soft)}.row:hover{background:var(--soft2)}
+.row b{color:var(--head)}
+.row span{word-break:break-word;font-variant-numeric:tabular-nums}
+
+/* Steps + headers */
+.steps{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;counter-reset:s}
+.steps li{counter-increment:s;padding:14px 16px;border-radius:14px;background:var(--soft);border:1px solid var(--line);font-size:.95rem;transition:background .2s,transform .2s}
+.steps li:hover{background:var(--soft2);transform:translateY(-2px)}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:26px;height:26px;margin-bottom:8px;border-radius:50%;font-size:.8rem;font-weight:800;color:#fff;background:linear-gradient(135deg,#3b82f6,#0b2a5b)}
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 6px}
+.sec-head b{color:var(--head)}
+.note{color:var(--muted);font-size:.88rem;margin-bottom:10px}
+.hdrs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.hdr{padding:13px 15px;border-radius:14px;border:1px solid var(--line);border-left:4px solid #3b82f6;background:var(--card);transition:box-shadow .2s,transform .2s}
+.hdr:hover{transform:translateY(-2px);box-shadow:0 12px 22px -14px rgba(29,78,216,.45)}
+.hdr p{margin-top:4px;font-size:.86rem;color:var(--muted);line-height:1.45}
+.hdr .val{display:block;margin-top:8px;padding:6px 10px;border-radius:8px;background:var(--soft);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.8rem;word-break:break-all}
+.hdr .val.na{color:var(--muted);font-style:italic;font-family:inherit}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85rem;font-weight:600;background:var(--chip);color:var(--head);padding:2px 8px;border-radius:6px;border:1px solid var(--chipline)}
+
+footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:.95rem}
+footer time{color:var(--head);font-weight:700;font-variant-numeric:tabular-nums}
+
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.wrap>*{animation:rise .6s ease both}
+.wrap>*:nth-child(3){animation-delay:.08s}.wrap>*:nth-child(4){animation-delay:.16s}.wrap>*:nth-child(5){animation-delay:.24s}
+
+@media (max-width:600px){
+  .row{grid-template-columns:1fr;gap:2px}.card{padding:22px 18px}.cap{padding:16px 18px 60px}.metrics{margin:-46px 8px 0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{.topbar,button,.hero img{display:none}body{background:#fff}.card,.tile{box-shadow:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="topbar"></div>
+<div class="wrap" id="main">
+
+  <header>
+    <h1>Hello CDN!</h1>
+    <span class="badge"><span class="dot"></span>Live</span>
+    <p class="sub">A test page deployed to observe Content Delivery Network behavior.</p>
+    <hr class="rule">
+  </header>
+
+  <figure class="hero">
+    <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Half_filled_server_racks.jpg?width=1400"
+         alt="Rows of server racks in a data center" onerror="this.style.display='none'">
+    <figcaption class="cap">
+    
+    </figcaption>
+  </figure>
+
+  <div class="metrics" aria-label="Live page metrics">
+    <div class="tile"><small>Time to first byte</small><b id="m-ttfb">…</b></div>
+    <div class="tile"><small>Page load</small><b id="m-load">…</b></div>
+    <div class="tile"><small>Protocol</small><b id="m-proto">…</b></div>
+    <div class="tile"><small>Transfer size</small><b id="m-size">…</b></div>
+  </div>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Deployment Information</h2>
+      <button id="copy" type="button">Copy details</button>
+    </div>
+    <hr class="divider">
+    <div class="info">
+      <div class="row"><b>Student Name:</b><span id="student-name">Ruby-Lynn M. Busto</span></div>
+      <div class="row"><b>Student ID:</b><span id="student-id">2400285</span></div>
+      <div class="row"><b>Deployment Time (UTC):</b><span id="utc">…</span></div>
+      <div class="row"><b>Your Browser:</b><span id="ua">…</span></div>
+      <div class="row"><b>Viewport Size:</b><span id="vp">…</span></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>What to Check</h2>
+    <hr class="divider">
+    <ol class="steps">
+      <li>Open Developer Tools (<code>F12</code>)</li>
+      <li>Go to the <b>Network</b> tab</li>
+      <li>Refresh the page</li>
+      <li>Click the HTML request and view <code>Response Headers</code></li>
+    </ol>
+    <div class="sec-head"><b>Headers to look for</b><button id="refetch" type="button">Fetch live headers</button></div>
+    <p class="note" id="hdr-note">Values below are read from this page's own response when you fetch them.</p>
+    <div class="hdrs" id="hdrs"></div>
+  </section>
+
+  <footer>Page loaded at: <time id="ts">…</time></footer>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var HEADERS=[
+    ['server','Server','Which server software or CDN answered the request.'],
+    ['via','Via','Proxies or caches the request passed through.'],
+    ['x-nf-request-id','X-NF-Request-ID','Unique ID for tracing this request on the platform.'],
+    ['cache-control','cache-control','Rules for how long content may be cached.'],
+    ['age','age','Seconds the response has been stored in cache.']
+  ];
+  var box=$('hdrs');
+  HEADERS.forEach(function(h){
+    var d=document.createElement('div');d.className='hdr';
+    d.innerHTML='<code>'+h[1]+'</code><p>'+h[2]+'</p><span class="val na" id="h-'+h[0]+'">Not fetched yet</span>';
+    box.appendChild(d);
+  });
+
+  // Basics
+  $('utc').textContent=new Date().toISOString();
+  $('ua').textContent=navigator.userAgent;
+  function vp(){$('vp').textContent=window.innerWidth+' x '+window.innerHeight+' px'}
+  vp();addEventListener('resize',vp);
+  function tick(){$('ts').textContent=new Date().toLocaleString(undefined,{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+  tick();setInterval(tick,1000);
+
+  // Performance metrics
+  function metrics(){
+    var n=(performance.getEntriesByType('navigation')||[])[0];
+    if(!n){['ttfb','load','proto','size'].forEach(function(k){$('m-'+k).textContent='n/a'});return}
+    $('m-ttfb').textContent=Math.round(n.responseStart-n.requestStart)+' ms';
+    $('m-load').textContent=Math.round(n.loadEventEnd||performance.now())+' ms';
+    var p=n.nextHopProtocol||'';
+    $('m-proto').textContent=p?({'h2':'HTTP/2','h3':'HTTP/3','http/1.1':'HTTP/1.1'}[p]||p):'n/a';
+    $('m-size').textContent=n.transferSize?(n.transferSize/1024).toFixed(1)+' KB':(n.transferSize===0?'cached':'n/a');
+  }
+  if(document.readyState==='complete')setTimeout(metrics,0);else addEventListener('load',function(){setTimeout(metrics,0)});
+
+  // Live response headers (same-origin request to this page)
+  function setVal(k,v){var e=$('h-'+k);e.textContent=v||'Not sent by server';e.className='val'+(v?'':' na')}
+  function fetchHeaders(){
+    var note=$('hdr-note');
+    if(location.protocol==='file:'){note.textContent='Open this page over http(s) (after deploying) to read live headers.';return}
+    note.textContent='Fetching…';
+    fetch(location.href,{cache:'no-store'}).then(function(r){
+      HEADERS.forEach(function(h){setVal(h[0],r.headers.get(h[0]))});
+      note.textContent='HTTP '+r.status+' · fetched '+new Date().toLocaleTimeString()+'. Refetch to see changes in age.';
+    }).catch(function(){note.textContent='Could not read headers. Use the Network tab in Developer Tools instead.'});
+  }
+  $('refetch').addEventListener('click',fetchHeaders);
+  fetchHeaders();
+
+  // Copy details
+  $('copy').addEventListener('click',function(){
+    var b=this,t=['Student Name: '+$('student-name').textContent,'Student ID: '+$('student-id').textContent,
+      'Deployment Time (UTC): '+$('utc').textContent,'Viewport: '+$('vp').textContent].join('\n');
+    function done(m){b.textContent=m;setTimeout(function(){b.textContent='Copy details'},1600)}
+    try{navigator.clipboard.writeText(t).then(function(){done('Copied')},function(){done('Copy failed')})}catch(e){done('Copy failed')}
+  });
+})();
+</script>
+</body>
+</html>
